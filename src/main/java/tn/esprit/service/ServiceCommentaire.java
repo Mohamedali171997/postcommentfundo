@@ -6,6 +6,8 @@ import tn.esprit.utile.DatabaseConnection;
 
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 
 public class ServiceCommentaire implements IService<Commentaire> {
     private Connection connection;
@@ -79,4 +81,47 @@ public class ServiceCommentaire implements IService<Commentaire> {
             return false;
         }
     }
+
+
+    public ArrayList<Commentaire> searchByContent(String keyword) {
+        ArrayList<Commentaire> matchingComments = new ArrayList<>();
+        String query = "SELECT * FROM `Commentaires` WHERE LOWER(`content`) LIKE LOWER(?)";
+        try (PreparedStatement statement = connection.prepareStatement(query)) {
+            statement.setString(1, "%" + keyword + "%");
+
+            try (ResultSet resultSet = statement.executeQuery()) {
+                while (resultSet.next()) {
+                    Commentaire commentaire = new Commentaire();
+                    commentaire.setCommentaireId(resultSet.getInt("Commentaire_id"));
+                    commentaire.setPostId(resultSet.getInt("post_id"));
+                    commentaire.setContent(resultSet.getString("content"));
+                    commentaire.setUserId(resultSet.getInt("user_id"));
+                    commentaire.setDate(resultSet.getDate("date"));
+
+                    matchingComments.add(commentaire);
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return matchingComments;
+    }
+
+    public void sortByDate(ArrayList<Commentaire> commentaires) {
+        Collections.sort(commentaires, Comparator.comparing(Commentaire::getDate)); // Assuming there's a getDate() method in Commentaire class
+
+    }
+    public void sortByUser(ArrayList<Commentaire> commentaires) {
+        Collections.sort(commentaires, Comparator.comparingInt(Commentaire::getUserId));}
+
+
+    public void sortByLength(ArrayList<Commentaire> commentaires) {
+        Collections.sort(commentaires, Comparator.comparingInt(commentaire -> commentaire.getContent().length()));
+    }
+
+
+
+
+
+
 }

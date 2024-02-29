@@ -22,11 +22,11 @@ import java.io.IOException;
 
         @Override
         public void start(Stage primaryStage) {
-            FXMLLoader loader=new FXMLLoader(getClass().getResource("/AjouterPersonnes.fxml"));
+            FXMLLoader loader=new FXMLLoader(getClass().getResource("/FXML/CombinedWindow.fxml"));
             try {
                 Parent root = loader.load();
                 Scene scene =new Scene(root);
-                primaryStage.setTitle("gestion personne");
+                primaryStage.setTitle("gestion comment post");
                 primaryStage.setScene(scene);
                 primaryStage.show();
 

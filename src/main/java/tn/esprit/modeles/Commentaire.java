@@ -24,6 +24,9 @@ public class Commentaire {
         this.date = date;
 
     }
+    public Commentaire(int CommentaireId) {
+        this.CommentaireId = CommentaireId;
+    }
 
     public int getCommentaireId() {
         return CommentaireId;

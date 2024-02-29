@@ -20,6 +20,5 @@ public class TriPost {
         Collections.sort(posts, Comparator.comparingInt(post -> post.getContent().length()));
     }
 
-    // You can add more sorting methods based on different criteria
 }
 

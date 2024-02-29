@@ -16,11 +16,12 @@ public class ServicePost implements IService<Post> {
 
     @Override
     public void add(Post post) {
-        String query = "INSERT INTO `posts`(`title`, `content`, `author_id`) VALUES (?, ?, ?)";
+        String query = "INSERT INTO `posts`(`post_id`, `title`, `content`, `author_id`) VALUES (?, ?, ?, ?)";
         try (PreparedStatement statement = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS)) {
-            statement.setString(1, post.getTitle());
-            statement.setString(2, post.getContent());
-            statement.setInt(3, post.getAuthorId());
+            statement.setInt(1, post.getPostId());  // Assuming you have set the post_id in your Post object
+            statement.setString(2, post.getTitle());
+            statement.setString(3, post.getContent());
+            statement.setInt(4, post.getAuthorId());
 
             statement.executeUpdate();
 
@@ -31,7 +32,18 @@ public class ServicePost implements IService<Post> {
         } catch (SQLException e) {
             e.printStackTrace();
         }
+
+
     }
+
+
+
+
+
+
+
+
+
 
     @Override
     public ArrayList<Post> getAll() {
@@ -82,4 +94,28 @@ public class ServicePost implements IService<Post> {
             return false;
         }
     }
+    public ArrayList<Post> searchByTitle(String keyword) {
+        ArrayList<Post> matchingPosts = new ArrayList<>();
+        String query = "SELECT * FROM `posts` WHERE LOWER(`title`) LIKE LOWER(?)";
+        try (PreparedStatement statement = connection.prepareStatement(query)) {
+            statement.setString(1, "%" + keyword + "%");
+
+            try (ResultSet resultSet = statement.executeQuery()) {
+                while (resultSet.next()) {
+                    Post post = new Post();
+                    post.setPostId(resultSet.getInt("post_id"));
+                    post.setTitle(resultSet.getString("title"));
+                    post.setContent(resultSet.getString("content"));
+                    post.setAuthorId(resultSet.getInt("author_id"));
+
+                    matchingPosts.add(post);
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return matchingPosts;
+    }
+
+
 }
