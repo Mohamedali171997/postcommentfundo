@@ -8,15 +8,21 @@ import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.TextField;
+import javafx.scene.shape.Circle;
 import javafx.stage.Stage;
 import tn.esprit.modeles.Post;
 import tn.esprit.service.ServicePost;
 
+import javax.swing.text.html.ImageView;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
 public class AjoutPost {
+    @FXML
+    private ImageView roundedImageView;
+
+
 
     @FXML
     private ResourceBundle resources;

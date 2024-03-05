@@ -6,43 +6,30 @@
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.control.cell.PropertyValueFactory?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.FlowPane?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.layout.VBox?>
+<?import java.net.URL?>
+<?import javafx.scene.layout.HBox?>
 
-<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="tn.esprit.controllers.AfficherCommentaireController">
-    <TableView fx:id="tableView" layoutX="32.0" layoutY="39.0" prefHeight="319.0" prefWidth="537.0">
-        <columns>
-            <TableColumn fx:id="idColumn" prefWidth="75.0" text="ID">
-                <cellValueFactory>
-                    <PropertyValueFactory property="commentaireId" />
-                </cellValueFactory>
-            </TableColumn>
-            <TableColumn fx:id="postIdColumn" prefWidth="75.0" text="Post ID">
-                <cellValueFactory>
-                    <PropertyValueFactory property="postId" />
-                </cellValueFactory>
-            </TableColumn>
-            <TableColumn fx:id="contentColumn" prefWidth="200.0" text="Content">
-                <cellValueFactory>
-                    <PropertyValueFactory property="content" />
-                </cellValueFactory>
-            </TableColumn>
-            <TableColumn fx:id="userIdColumn" prefWidth="75.0" text="User ID">
-                <cellValueFactory>
-                    <PropertyValueFactory property="userId" />
-                </cellValueFactory>
-            </TableColumn>
-            <TableColumn fx:id="dateColumn" prefWidth="112.0" text="Date">
-                <cellValueFactory>
-                    <PropertyValueFactory property="date" />
-                </cellValueFactory>
-            </TableColumn>
-        </columns>
-    </TableView>
-    <AnchorPane layoutX="35.0" layoutY="374.0" prefHeight="25.0" prefWidth="626.0">
-        <TextField fx:id="keywordTextField" prefHeight="25.0" prefWidth="140.0" promptText="Search by keyword" />
-        <Button layoutX="190.0" layoutY="0.0" mnemonicParsing="false" onAction="#handleSearchButton" text="Search" />
-        <Button layoutX="190.0" mnemonicParsing="false" onAction="#handleSearchButton" prefHeight="25.0" prefWidth="65.0" text="Search" />
-        <Button layoutX="271.0" mnemonicParsing="false" onAction="#handleSortByDate" prefHeight="25.0" prefWidth="100.0" text="Sort by title" />
-        <Button layoutX="379.0" mnemonicParsing="false" onAction="#handleSortByUser" prefHeight="25.0" prefWidth="100.0" text="Sort by author" />
-        <Button layoutX="502.0" mnemonicParsing="false" onAction="#handleSortByLength" prefHeight="25.0" prefWidth="115.0" text="Sort by content length" />
-    </AnchorPane>
+<AnchorPane prefHeight="600.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="tn.esprit.controllers.AfficherCommentaireController">
+    <children >
+        <VBox prefHeight="600.0" prefWidth="800.0" style="-fx-background-color: #f0f0f0; -fx-border-color: #0125f6;"  VBox.vgrow="ALWAYS" alignment="TOP_LEFT">
+            <!-- Your existing content goes here -->
+            <ScrollPane prefHeight="600.0" prefWidth="800.0" fitToWidth="true">
+                <content>
+                    <FlowPane fx:id="cardContainer" prefHeight="600.0" prefWidth="800.0" styleClass="card-container">
+                        <!-- Card views will be dynamically added here -->
+                    </FlowPane>
+                </content>
+            </ScrollPane>
+            <HBox prefHeight="25.0" prefWidth="600.0">
+                <TextField fx:id="keywordTextField" prefHeight="25.0" prefWidth="140.0" promptText="Search by keyword" />
+                <Button layoutX="190.0" layoutY="0.0" mnemonicParsing="false" onAction="#handleSearchButton" text="Search" />
+                <Button layoutX="271.0" mnemonicParsing="false" onAction="#handleSortByDate" prefHeight="25.0" prefWidth="100.0" text="Sort by title" />
+                <Button layoutX="379.0" mnemonicParsing="false" onAction="#handleSortByUser" prefHeight="25.0" prefWidth="100.0" text="Sort by author" />
+                <Button layoutX="502.0" mnemonicParsing="false" onAction="#handleSortByLength" prefHeight="25.0" prefWidth="115.0" text="Sort by content length" />
+            </HBox>
+        </VBox>
+    </children>
 </AnchorPane>
