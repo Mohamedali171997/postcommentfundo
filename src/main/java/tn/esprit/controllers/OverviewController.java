@@ -1,14 +1,13 @@
 package tn.esprit.controllers;
+
 import javafx.fxml.FXML;
 import javafx.scene.chart.BarChart;
 import javafx.scene.chart.CategoryAxis;
 import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.XYChart;
 import javafx.scene.control.Label;
-import tn.esprit.modeles.Commentaire;
-import tn.esprit.utile.StatisticsService;
+import tn.esprit.service.ServiceCommentaire;
 
-import java.util.List;
 import java.util.Map;
 
 public class OverviewController {
@@ -17,31 +16,53 @@ public class OverviewController {
     private BarChart<String, Number> commentsBarChart;
 
     @FXML
-    private Label commentsPerDayLabel;
+    private Label commentsPerUserLabel;
 
     @FXML
     private Label totalCommentsLabel;
 
-    // Assuming you have access to the list of comments
-    private List<Commentaire> commentaire;
+    private ServiceCommentaire commentService = new ServiceCommentaire();
 
+    @FXML
     public void initialize() {
-        StatisticsService statisticsService = new StatisticsService();
+        updateChart();
+    }
 
-        // Calculate comments per day
-        Map<String, Integer> commentsPerDay = statisticsService.calculateCommentsPerDay(commentaire);
-        int totalComments = commentaire.stream().mapToInt(c -> 1).sum();
+    private void updateChart() {
+        Map<Integer, Integer> commentCountPerUser = commentService.getCommentCountPerUser();
+        int totalComments = commentCountPerUser.values().stream().mapToInt(Integer::intValue).sum();
 
         // Display the result in your UI
-        commentsPerDayLabel.setText("Comments per day: " + commentsPerDay);
+        commentsPerUserLabel.setText("Comments per user: " + commentCountPerUser);
         totalCommentsLabel.setText("Total Comments: " + totalComments);
 
         // Update the bar chart with the data
         XYChart.Series<String, Number> series = new XYChart.Series<>();
-        for (Map.Entry<String, Integer> entry : commentsPerDay.entrySet()) {
-            series.getData().add(new XYChart.Data<>(entry.getKey(), entry.getValue()));
+        for (Map.Entry<Integer, Integer> entry : commentCountPerUser.entrySet()) {
+            series.getData().add(new XYChart.Data<>(String.valueOf(entry.getKey()), entry.getValue()));
         }
 
+        commentsBarChart.getData().clear(); // Clear previous data
         commentsBarChart.getData().add(series);
+
+        // Apply styles
+        styleLabels();
+        styleChart();
+    }
+
+    private void styleLabels() {
+        // Add styles to labels
+        commentsPerUserLabel.setStyle("-fx-font-size: 14; -fx-font-weight: bold; -fx-text-fill: #0073e6;");
+        totalCommentsLabel.setStyle("-fx-font-size: 14; -fx-font-weight: bold; -fx-text-fill: #0073e6;");
+    }
+
+    private void styleChart() {
+        // Customize chart style
+        commentsBarChart.setStyle("-fx-background-color: #f4f4f4;");
+        CategoryAxis xAxis = (CategoryAxis) commentsBarChart.getXAxis();
+        NumberAxis yAxis = (NumberAxis) commentsBarChart.getYAxis();
+
+        xAxis.setStyle("-fx-font-size: 12; -fx-font-weight: bold;");
+        yAxis.setStyle("-fx-font-size: 12; -fx-font-weight: bold;");
     }
 }

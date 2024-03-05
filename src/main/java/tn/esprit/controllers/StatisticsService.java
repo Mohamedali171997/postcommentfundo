@@ -1,4 +1,4 @@
-package tn.esprit.utile;
+package tn.esprit.controllers;
 
 import tn.esprit.modeles.Commentaire;
 

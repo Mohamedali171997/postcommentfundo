@@ -5,9 +5,7 @@ import tn.esprit.modeles.Commentaire;
 import tn.esprit.utile.DatabaseConnection;
 
 import java.sql.*;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
+import java.util.*;
 
 public class ServiceCommentaire implements IService<Commentaire> {
     private Connection connection;
@@ -44,6 +42,7 @@ public class ServiceCommentaire implements IService<Commentaire> {
                 Commentaire.setPostId(resultSet.getInt("post_id"));
                 Commentaire.setContent(resultSet.getString("content"));
                 Commentaire.setUserId(resultSet.getInt("user_id"));
+                Commentaire.setDate(resultSet.getDate("date"));
 
                 Commentaires.add(Commentaire);
             }
@@ -124,4 +123,98 @@ public class ServiceCommentaire implements IService<Commentaire> {
 
 
 
+
+
+
+
+
+
+
+
+  /*
+    public ArrayList<Commentaire> getCommentsByDate(Date targetDate) {
+        ArrayList<Commentaire> Commentaires = new ArrayList<>();
+        String query = "SELECT * FROM `Commentaires` WHERE `date` = ?";
+        try (PreparedStatement statement = connection.prepareStatement(query)) {
+            statement.setDate(1, targetDate);
+
+            try (ResultSet resultSet = statement.executeQuery()) {
+                while (resultSet.next()) {
+                    Commentaire Commentaire = new Commentaire();
+                    Commentaire.setCommentaireId(resultSet.getInt("Commentaire_id"));
+                    Commentaire.setPostId(resultSet.getInt("post_id"));
+                    Commentaire.setContent(resultSet.getString("content"));
+                    Commentaire.setUserId(resultSet.getInt("user_id"));
+                    Commentaire.setDate(resultSet.getDate("date"));
+
+                    Commentaires.add(Commentaire);
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return Commentaires;
+    }*/
+    public ArrayList<Commentaire> getCommentsByDate() {
+    ArrayList<Commentaire> Commentaires = new ArrayList<>();
+    String query = "SELECT * FROM `Commentaires`";
+        try (PreparedStatement statement = connection.prepareStatement(query);
+    ResultSet resultSet = statement.executeQuery()) {
+        while (resultSet.next()) {
+            Commentaire Commentaire = new Commentaire();
+            Commentaire.setCommentaireId(resultSet.getInt("Commentaire_id"));
+            Commentaire.setPostId(resultSet.getInt("post_id"));
+            Commentaire.setContent(resultSet.getString("content"));
+            Commentaire.setUserId(resultSet.getInt("user_id"));
+            Commentaire.setDate(resultSet.getDate("date"));
+
+            Commentaires.add(Commentaire);
+        }
+    } catch (SQLException e) {
+        e.printStackTrace();
+    }
+        return Commentaires;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+    public int getUserIdByCommentId(int commentId) {
+        String query = "SELECT user_id FROM Commentaires WHERE Commentaire_id = ?";
+        try (PreparedStatement statement = connection.prepareStatement(query)) {
+            statement.setInt(1, commentId);
+            try (ResultSet resultSet = statement.executeQuery()) {
+                if (resultSet.next()) {
+                    return resultSet.getInt("user_id");
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return -1; // or handle appropriately if not found
+    }
+
+    public Map<Integer, Integer> getCommentCountPerUser() {
+        Map<Integer, Integer> commentCountPerUser = new HashMap<>();
+        String query = "SELECT user_id, COUNT(*) AS comment_count FROM Commentaires GROUP BY user_id";
+        try (PreparedStatement statement = connection.prepareStatement(query);
+             ResultSet resultSet = statement.executeQuery()) {
+            while (resultSet.next()) {
+                int userId = resultSet.getInt("user_id");
+                int commentCount = resultSet.getInt("comment_count");
+                commentCountPerUser.put(userId, commentCount);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return commentCountPerUser;
+    }
 }
