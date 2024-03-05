@@ -6,6 +6,9 @@ import tn.esprit.utile.DatabaseConnection;
 
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class ServicePost implements IService<Post> {
     private Connection connection;
@@ -116,6 +119,24 @@ public class ServicePost implements IService<Post> {
         }
         return matchingPosts;
     }
+
+
+
+    public Map<Integer, Integer> getPostCountPerUser() {
+        List<Post> allPosts = getAll();
+
+        Map<Integer, Integer> postCountPerUser = new HashMap<>();
+
+        for (Post post : allPosts) {
+            int userId = post.getAuthorId(); // Utilisez la méthode appropriée pour obtenir l'ID de l'utilisateur associé à la publication
+            postCountPerUser.put(userId, postCountPerUser.getOrDefault(userId, 0) + 1);
+        }
+
+        return postCountPerUser;
+    }
+
+
+
 
 
 }

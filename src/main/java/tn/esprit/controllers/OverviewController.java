@@ -1,16 +1,20 @@
 package tn.esprit.controllers;
 
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
-import javafx.scene.chart.BarChart;
-import javafx.scene.chart.CategoryAxis;
-import javafx.scene.chart.NumberAxis;
-import javafx.scene.chart.XYChart;
+import javafx.scene.chart.*;
 import javafx.scene.control.Label;
 import tn.esprit.service.ServiceCommentaire;
+import tn.esprit.service.ServicePost;
 
 import java.util.Map;
 
 public class OverviewController {
+
+
+    @FXML
+    private PieChart postsPieChart;
 
     @FXML
     private BarChart<String, Number> commentsBarChart;
@@ -48,6 +52,7 @@ public class OverviewController {
         // Apply styles
         styleLabels();
         styleChart();
+        updatePostStats();
     }
 
     private void styleLabels() {
@@ -64,5 +69,22 @@ public class OverviewController {
 
         xAxis.setStyle("-fx-font-size: 12; -fx-font-weight: bold;");
         yAxis.setStyle("-fx-font-size: 12; -fx-font-weight: bold;");
+
+        // Styles spécifiques pour le PieChart
+        postsPieChart.setStyle("-fx-background-color: #f4f4f4;");
     }
+    ServicePost ServicePost = new ServicePost();
+    private void updatePostStats() {
+        Map<Integer, Integer> postCountPerUser = ServicePost.getPostCountPerUser();
+
+        // Update the pie chart with the data
+        ObservableList<PieChart.Data> pieChartData = FXCollections.observableArrayList();
+        for (Map.Entry<Integer, Integer> entry : postCountPerUser.entrySet()) {
+            pieChartData.add(new PieChart.Data("User " + entry.getKey(), entry.getValue()));
+        }
+
+        postsPieChart.setData(pieChartData);
+    }
+
+
 }
