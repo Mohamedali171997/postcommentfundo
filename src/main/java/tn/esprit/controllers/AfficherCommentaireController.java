@@ -24,23 +24,7 @@ public class AfficherCommentaireController {
     @FXML
     private URL location;
 
-    @FXML
-    private TableView<Commentaire> tableView;
 
-    @FXML
-    private TableColumn<Commentaire, Integer> idColumn;
-
-    @FXML
-    private TableColumn<Commentaire, Integer> postIdColumn;
-
-    @FXML
-    private TableColumn<Commentaire, String> contentColumn;
-
-    @FXML
-    private TableColumn<Commentaire, Integer> userIdColumn;
-
-    @FXML
-    private TableColumn<Commentaire, String> dateColumn;
     @FXML
     private FlowPane cardContainer; // Check the type
 
